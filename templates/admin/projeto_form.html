@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}{% if projeto %}Editar Projeto{% else %}Novo Projeto{% endif %} - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 admin-sidebar">
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{{ url_for('admin') }}">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <a class="nav-link active" href="{{ url_for('admin_projetos') }}">
+                    <i class="fas fa-project-diagram me-2"></i>Projetos
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_noticias') }}">
+                    <i class="fas fa-newspaper me-2"></i>Notícias
+                </a>
+                <hr>
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <i class="fas fa-home me-2"></i>Voltar ao Site
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="h3 mb-0">
+                                <i class="fas fa-{% if projeto %}edit{% else %}plus{% endif %} text-primary me-2"></i>
+                                {% if projeto %}Editar Projeto{% else %}Novo Projeto{% endif %}
+                            </h1>
+                            <p class="text-muted">
+                                {% if projeto %}
+                                Edite as informações do projeto "{{ projeto.titulo }}"
+                                {% else %}
+                                Cadastre um novo projeto no Integra Maker
+                                {% endif %}
+                            </p>
+                        </div>
+                        <a href="{{ url_for('admin_projetos') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Voltar
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-form me-2"></i>Informações do Projeto
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="titulo" class="form-label">Título do Projeto *</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="titulo" 
+                                           name="titulo" 
+                                           value="{% if projeto %}{{ projeto.titulo }}{% endif %}"
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o título do projeto.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Status *</label>
+                                    <select class="form-select" id="status" name="status" required>
+                                        <option value="ativo" {% if projeto and projeto.status == 'ativo' %}selected{% endif %}>Ativo</option>
+                                        <option value="concluido" {% if projeto and projeto.status == 'concluido' %}selected{% endif %}>Concluído</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição do Projeto *</label>
+                            <textarea class="form-control" 
+                                      id="descricao" 
+                                      name="descricao" 
+                                      rows="6" 
+                                      data-max-length="2000"
+                                      required>{% if projeto %}{{ projeto.descricao }}{% endif %}</textarea>
+                            <div class="invalid-feedback">
+                                Por favor, insira uma descrição do projeto.
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="equipe" class="form-label">Equipe *</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="equipe" 
+                                           name="equipe" 
+                                           value="{% if projeto %}{{ projeto.equipe }}{% endif %}"
+                                           placeholder="Ex: João Silva, Maria Santos, Pedro Costa"
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira os membros da equipe.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="disciplina" class="form-label">Disciplina *</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="disciplina" 
+                                           name="disciplina" 
+                                           value="{% if projeto %}{{ projeto.disciplina }}{% endif %}"
+                                           placeholder="Ex: Programação Web, Eletrônica Digital"
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira a disciplina relacionada.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tecnologias" class="form-label">Tecnologias Utilizadas</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="tecnologias" 
+                                           name="tecnologias" 
+                                           value="{% if projeto %}{{ projeto.tecnologias }}{% endif %}"
+                                           placeholder="Ex: Python, Arduino, HTML/CSS, JavaScript">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="imagem_url" class="form-label">URL da Imagem</label>
+                                    <input type="url" 
+                                           class="form-control" 
+                                           id="imagem_url" 
+                                           name="imagem_url" 
+                                           value="{% if projeto %}{{ projeto.imagem_url }}{% endif %}"
+                                           placeholder="https://exemplo.com/imagem.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('admin_projetos') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                {% if projeto %}Atualizar Projeto{% else %}Criar Projeto{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

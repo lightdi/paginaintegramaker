@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 admin-sidebar">
+            <nav class="nav flex-column">
+                <a class="nav-link active" href="{{ url_for('admin') }}">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_projetos') }}">
+                    <i class="fas fa-project-diagram me-2"></i>Projetos
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_noticias') }}">
+                    <i class="fas fa-newspaper me-2"></i>Notícias
+                </a>
+                <hr>
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <i class="fas fa-home me-2"></i>Voltar ao Site
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-tachometer-alt text-primary me-2"></i>Dashboard Administrativo
+                    </h1>
+                    <p class="text-muted">Visão geral do Integra Maker</p>
+                </div>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="dashboard-card">
+                        <h3>{{ total_projetos }}</h3>
+                        <p><i class="fas fa-project-diagram me-2"></i>Total de Projetos</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="dashboard-card" style="background: linear-gradient(135deg, var(--secondary-color), var(--light-green));">
+                        <h3>{{ projetos_ativos }}</h3>
+                        <p><i class="fas fa-rocket me-2"></i>Projetos Ativos</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="dashboard-card" style="background: linear-gradient(135deg, var(--accent-color), var(--light-orange));">
+                        <h3>{{ projetos_concluidos }}</h3>
+                        <p><i class="fas fa-trophy me-2"></i>Projetos Concluídos</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="dashboard-card" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+                        <h3>{{ total_noticias }}</h3>
+                        <p><i class="fas fa-newspaper me-2"></i>Notícias Publicadas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-bolt text-warning me-2"></i>Ações Rápidas
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_projeto_novo') }}" class="btn btn-primary w-100">
+                                        <i class="fas fa-plus me-2"></i>Novo Projeto
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_noticia_nova') }}" class="btn btn-info w-100">
+                                        <i class="fas fa-plus me-2"></i>Nova Notícia
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_projetos') }}" class="btn btn-outline-primary w-100">
+                                        <i class="fas fa-list me-2"></i>Gerenciar Projetos
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ url_for('admin_noticias') }}" class="btn btn-outline-info w-100">
+                                        <i class="fas fa-list me-2"></i>Gerenciar Notícias
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projetos Recentes -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-clock text-primary me-2"></i>Projetos Recentes
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% set projetos_recentes = [] %}
+                            {% for projeto in projetos if projetos %}
+                                {% set _ = projetos_recentes.append(projeto) %}
+                            {% endfor %}
+                            
+                            {% if projetos_recentes %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Título</th>
+                                            <th>Status</th>
+                                            <th>Disciplina</th>
+                                            <th>Data</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for projeto in projetos_recentes[:5] %}
+                                        <tr>
+                                            <td>{{ projeto.titulo }}</td>
+                                            <td>
+                                                {% if projeto.status == 'ativo' %}
+                                                <span class="badge bg-success">Ativo</span>
+                                                {% else %}
+                                                <span class="badge bg-warning">Concluído</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ projeto.disciplina }}</td>
+                                            <td>{{ projeto.data_criacao.strftime('%d/%m/%Y') }}</td>
+                                            <td>
+                                                <a href="{{ url_for('admin_projeto_editar', id=projeto.id) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-project-diagram fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">Nenhum projeto cadastrado ainda.</p>
+                                <a href="{{ url_for('admin_projeto_novo') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus me-2"></i>Criar Primeiro Projeto
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notícias Recentes -->
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-newspaper text-info me-2"></i>Notícias Recentes
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% set noticias_recentes = [] %}
+                            {% for noticia in noticias if noticias %}
+                                {% set _ = noticias_recentes.append(noticia) %}
+                            {% endfor %}
+                            
+                            {% if noticias_recentes %}
+                                {% for noticia in noticias_recentes[:3] %}
+                                <div class="d-flex align-items-start mb-3">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-newspaper text-info"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-1">
+                                            <a href="{{ url_for('admin_noticia_editar', id=noticia.id) }}" class="text-decoration-none">
+                                                {{ noticia.titulo }}
+                                            </a>
+                                        </h6>
+                                        <small class="text-muted">
+                                            {{ noticia.data_publicacao.strftime('%d/%m/%Y') }}
+                                        </small>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">Nenhuma notícia publicada ainda.</p>
+                                <a href="{{ url_for('admin_noticia_nova') }}" class="btn btn-info">
+                                    <i class="fas fa-plus me-2"></i>Criar Primeira Notícia
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

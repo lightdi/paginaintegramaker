@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Projetos - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 admin-sidebar">
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{{ url_for('admin') }}">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <a class="nav-link active" href="{{ url_for('admin_projetos') }}">
+                    <i class="fas fa-project-diagram me-2"></i>Projetos
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_noticias') }}">
+                    <i class="fas fa-newspaper me-2"></i>Notícias
+                </a>
+                <hr>
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <i class="fas fa-home me-2"></i>Voltar ao Site
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="h3 mb-0">
+                                <i class="fas fa-project-diagram text-primary me-2"></i>Gerenciar Projetos
+                            </h1>
+                            <p class="text-muted">Gerencie todos os projetos do Integra Maker</p>
+                        </div>
+                        <a href="{{ url_for('admin_projeto_novo') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Novo Projeto
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Projetos -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>Lista de Projetos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if projetos %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Título</th>
+                                    <th>Equipe</th>
+                                    <th>Disciplina</th>
+                                    <th>Status</th>
+                                    <th>Data Criação</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for projeto in projetos %}
+                                <tr>
+                                    <td>{{ projeto.id }}</td>
+                                    <td>{{ projeto.titulo }}</td>
+                                    <td>{{ projeto.equipe }}</td>
+                                    <td>{{ projeto.disciplina }}</td>
+                                    <td>
+                                        {% if projeto.status == 'ativo' %}
+                                        <span class="badge bg-success">Ativo</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Concluído</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ projeto.data_criacao.strftime('%d/%m/%Y') }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('projeto_detalhes', id=projeto.id) }}" 
+                                               class="btn btn-sm btn-outline-info" 
+                                               data-bs-toggle="tooltip" 
+                                               title="Ver Detalhes">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ url_for('admin_projeto_editar', id=projeto.id) }}" 
+                                               class="btn btn-sm btn-outline-primary" 
+                                               data-bs-toggle="tooltip" 
+                                               title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{{ url_for('admin_projeto_deletar', id=projeto.id) }}" 
+                                               class="btn btn-sm btn-outline-danger btn-delete" 
+                                               data-bs-toggle="tooltip" 
+                                               title="Excluir">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-project-diagram fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">Nenhum projeto cadastrado</h4>
+                        <p class="text-muted">Comece criando o primeiro projeto do Integra Maker!</p>
+                        <a href="{{ url_for('admin_projeto_novo') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Criar Primeiro Projeto
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

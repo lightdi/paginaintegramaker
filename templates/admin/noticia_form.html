@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{% if noticia %}Editar Notícia{% else %}Nova Notícia{% endif %} - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 admin-sidebar">
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{{ url_for('admin') }}">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('admin_projetos') }}">
+                    <i class="fas fa-project-diagram me-2"></i>Projetos
+                </a>
+                <a class="nav-link active" href="{{ url_for('admin_noticias') }}">
+                    <i class="fas fa-newspaper me-2"></i>Notícias
+                </a>
+                <hr>
+                <a class="nav-link" href="{{ url_for('index') }}">
+                    <i class="fas fa-home me-2"></i>Voltar ao Site
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="h3 mb-0">
+                                <i class="fas fa-{% if noticia %}edit{% else %}plus{% endif %} text-info me-2"></i>
+                                {% if noticia %}Editar Notícia{% else %}Nova Notícia{% endif %}
+                            </h1>
+                            <p class="text-muted">
+                                {% if noticia %}
+                                Edite as informações da notícia "{{ noticia.titulo }}"
+                                {% else %}
+                                Publique uma nova notícia no Integra Maker
+                                {% endif %}
+                            </p>
+                        </div>
+                        <a href="{{ url_for('admin_noticias') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Voltar
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-form me-2"></i>Informações da Notícia
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="titulo" class="form-label">Título da Notícia *</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="titulo" 
+                                   name="titulo" 
+                                   value="{% if noticia %}{{ noticia.titulo }}{% endif %}"
+                                   required>
+                            <div class="invalid-feedback">
+                                Por favor, insira o título da notícia.
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="autor" class="form-label">Autor *</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="autor" 
+                                           name="autor" 
+                                           value="{% if noticia %}{{ noticia.autor }}{% endif %}"
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Por favor, insira o nome do autor.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="imagem_url" class="form-label">URL da Imagem</label>
+                                    <input type="url" 
+                                           class="form-control" 
+                                           id="imagem_url" 
+                                           name="imagem_url" 
+                                           value="{% if noticia %}{{ noticia.imagem_url }}{% endif %}"
+                                           placeholder="https://exemplo.com/imagem.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="conteudo" class="form-label">Conteúdo da Notícia *</label>
+                            <textarea class="form-control" 
+                                      id="conteudo" 
+                                      name="conteudo" 
+                                      rows="12" 
+                                      data-max-length="5000"
+                                      required>{% if noticia %}{{ noticia.conteudo }}{% endif %}</textarea>
+                            <div class="invalid-feedback">
+                                Por favor, insira o conteúdo da notícia.
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('admin_noticias') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-save me-2"></i>
+                                {% if noticia %}Atualizar Notícia{% else %}Publicar Notícia{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

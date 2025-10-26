@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}{{ noticia.titulo }} - Integra Maker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Imagem da Notícia -->
+            {% if noticia.imagem_url %}
+            <div class="mb-4">
+                <img src="{{ noticia.imagem_url }}" class="img-fluid rounded" alt="{{ noticia.titulo }}" style="width: 100%; height: 400px; object-fit: cover;">
+            </div>
+            {% endif %}
+
+            <!-- Conteúdo da Notícia -->
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">{{ noticia.titulo }}</h1>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>Por {{ noticia.autor }}
+                            </small>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>{{ noticia.data_publicacao.strftime('%d/%m/%Y às %H:%M') }}
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="noticia-conteudo">
+                        {{ noticia.conteudo|replace('\n', '<br>')|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Ações -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>Ações
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('noticias') }}" class="btn btn-outline-info">
+                            <i class="fas fa-arrow-left me-2"></i>Voltar às Notícias
+                        </a>
+                        <button class="btn btn-outline-secondary" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Imprimir
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="copyToClipboard(window.location.href)">
+                            <i class="fas fa-share me-2"></i>Compartilhar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informações -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info me-2"></i>Informações
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-12 mb-3">
+                            <h6 class="text-muted">ID da Notícia</h6>
+                            <h5 class="text-info">#{{ noticia.id }}</h5>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-muted">Data de Publicação</h6>
+                            <h5 class="text-success">{{ noticia.data_publicacao.strftime('%d/%m/%Y') }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.noticia-conteudo {
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+@media print {
+    .navbar, .btn, .card-header {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-top: 0 !important;
+    }
+}
+</style>
+{% endblock %}
