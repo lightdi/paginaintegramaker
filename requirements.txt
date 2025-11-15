@@ -9,4 +9,10 @@ click==8.1.7
 blinker==1.6.2
 psycopg2-binary==2.9.7
 python-dotenv==1.0.0
+httpx==0.28.1
+langchain==1.0.5
+langchain-huggingface==1.0.1
+langchain-chroma==1.0.0
+sentence-transformers==5.1.2
+langchain-ollama
 gunicorn
