@@ -3,9 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from datetime import datetime, timedelta
 import os
+import requests
 import re
 from dotenv import load_dotenv
 from models import db, Usuario, Projeto, Noticia
+from rag.rag import query_rag
+
+TELEGRAM_TOKEN="8396320863:AAE2gcTlMhb-Xj5WEApaF8SrdBL0ls-_TmY"
+WEBHOOK_URL= "https://fearless-ellsworth-obsessional.ngrok-free.dev/telegram/webhook"
+API_KEY="AIzaSyDyI-EC9VxdPGCJDfs1Hls8kOFoCDHGpeU"
+BASE_URL = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
+
 
 # Carregar variáveis de ambiente
 load_dotenv('config.env')
@@ -24,9 +32,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{DB_USER}:{DB_PASSWORD}@{
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Configurações para URLs externas (necessário para emails)
-app.config['SERVER_NAME'] = '127.0.0.1:5000'
-app.config['APPLICATION_ROOT'] = '/'
-app.config['PREFERRED_URL_SCHEME'] = 'http'
+#app.config['SERVER_NAME'] = '0.0.0.0:5003'
+#app.config['APPLICATION_ROOT'] = '/'
+#app.config['PREFERRED_URL_SCHEME'] = 'http'
 
 # Configurações de email
 app.config.update({
@@ -58,7 +66,7 @@ def enviar_email_confirmacao(usuario):
     if app.config.get('MAIL_SUPPRESS_SEND', False):
         print(f"[MODO DESENVOLVIMENTO] Email de confirmacao para {usuario.email}")
         print(f"[MODO DESENVOLVIMENTO] Token: {token}")
-        print(f"[MODO DESENVOLVIMENTO] Link: http://127.0.0.1:5000/confirmar-email/{token}")
+        print(f"[MODO DESENVOLVIMENTO] Link: http://200.129.71.149/confirmar-email/{token}")
         usuario.confirmar_email()
         db.session.commit()
         return True
@@ -118,7 +126,7 @@ def enviar_email_confirmacao(usuario):
         print(f"Erro ao enviar email: {e}")
         print(f"[FALLBACK] Confirmando email automaticamente para {usuario.email}")
         print(f"[FALLBACK] Token: {token}")
-        print(f"[FALLBACK] Link: http://127.0.0.1:5000/confirmar-email/{token}")
+        print(f"[FALLBACK] Link: http://200.129.71.149/confirmar-email/{token}")
         usuario.confirmar_email()
         db.session.commit()
         return True
@@ -442,6 +450,33 @@ def admin_noticia_deletar(id):
     db.session.commit()
     flash('Notícia deletada com sucesso!', 'success')
     return redirect(url_for('admin_noticias'))
+
+
+def send_message(chat_id: int, text: str):
+    url = f"{BASE_URL}/sendMessage"
+    payload = {"chat_id": chat_id, "text": text}
+    requests.post(url, json=payload)  # <-- aqui muda request → requests
+
+
+
+    
+
+@app.route('/telegram/webhook', methods=['POST'])
+def telegram_webhook():
+    data = request.get_json(force=True)
+
+    # Verifica se tem mensagem
+    if "message" in data:
+        chat_id = data["message"]["chat"]["id"]
+        text = data["message"].get("text", "")
+
+        print(f"Mensagem de {chat_id}: {text}")
+
+        # Enviar resposta do RAG
+        resposta = query_rag(text)
+        send_message(chat_id, resposta)
+
+    return jsonify({"ok": True})
 
 if __name__ == '__main__':
     with app.app_context():
