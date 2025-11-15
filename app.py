@@ -24,9 +24,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{DB_USER}:{DB_PASSWORD}@{
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Configurações para URLs externas (necessário para emails)
-app.config['SERVER_NAME'] = '127.0.0.1:5000'
-app.config['APPLICATION_ROOT'] = '/'
-app.config['PREFERRED_URL_SCHEME'] = 'http'
+#app.config['SERVER_NAME'] = '127.0.0.1:5000'
+#app.config['APPLICATION_ROOT'] = '/'
+#app.config['PREFERRED_URL_SCHEME'] = 'http'
 
 # Configurações de email
 app.config.update({
