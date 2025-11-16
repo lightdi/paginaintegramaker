@@ -15,4 +15,5 @@ langchain-huggingface==1.0.1
 langchain-chroma==1.0.0
 sentence-transformers==5.1.2
 langchain-ollama
+langchain-google-genai
 gunicorn
