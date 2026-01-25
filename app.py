@@ -359,6 +359,10 @@ def noticia_detalhes(id):
 def sobre():
     return render_template('sobre.html')
 
+@app.route('/diploma', methods=['GET'])
+def diploma():
+    return render_template('diploma.html')
+
 # Área administrativa
 @app.route('/admin')
 @admin_required
@@ -528,8 +532,6 @@ def admin_usuario_alterar_senha(id):
 def send_message(chat_id: int, text: str):
     url = f"{BASE_URL}/sendMessage"
     payload = {"chat_id": chat_id, "text": text}
-    requests.post(url, json=payload)  # <-- aqui muda request → requests
-
 
 
     
@@ -555,9 +557,3 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
-
-#Página simples de ação
-@app.route('/diploma')
-def noticias():
-    return render_template('diploma.html')
