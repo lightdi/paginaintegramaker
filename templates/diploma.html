@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Diplomação de Aluno</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light p-4">
+
+<div class="container">
+  <h2 class="mb-4">Formulário de Diplomação</h2>
+  <form id="formulario">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">Nome do Aluno</label>
+        <input type="text" class="form-control" id="nome">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Matrícula</label>
+        <input type="text" class="form-control" id="matricula">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Data de Conclusão</label>
+        <input type="date" class="form-control" id="data">
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">Trabalho Final</label>
+        <select class="form-select" id="trabalho">
+          <option value="TCC">TCC</option>
+          <option value="Estágio">Estágio</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Gênero</label>
+        <select class="form-select" id="genero">
+          <option value="masculino">Masculino</option>
+          <option value="feminino">Feminino</option>
+        </select>
+      </div>
+
+    </div>
+
+    <h5 class="mt-4">Documentos</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc1">
+          <label class="form-check-label" for="doc1">01. Certidão de Nascimento ou Casamento</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc2">
+          <label class="form-check-label" for="doc2">02. RG</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc3">
+          <label class="form-check-label" for="doc3">03. CPF</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc4">
+          <label class="form-check-label" for="doc4">04. Título de Eleitor 18+</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc5">
+          <label class="form-check-label" for="doc5">05. Certidão de Quitação Eleitoral diploma 18+</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc6">
+          <label class="form-check-label" for="doc6">06. Comprovante de Quitação Militar 18+H</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc7">
+          <label class="form-check-label" for="doc7">07. Certificado Conclusão</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc8">
+          <label class="form-check-label" for="doc8">08. Histórico Escolar</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc9">
+          <label class="form-check-label" for="doc9">09. Biblioteca</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc10">
+          <label class="form-check-label" for="doc10">10. Financeiro</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc11">
+          <label class="form-check-label" for="doc11">11. Assistência Estudantil</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="doc12">
+          <label class="form-check-label" for="doc12">12. Declaração de autenticidade</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+      <button type="button" class="btn btn-primary" onclick="gerarMensagem()">Gerar Mensagem</button>
+      <button type="button" class="btn btn-secondary" onclick="copiarMensagem()">Copiar Mensagem</button>
+    </div>
+  </form>
+
+  <div class="mt-4">
+    <h5>Mensagem Gerada:</h5>
+    <div id="mensagem" class="border p-3 bg-white rounded" style="white-space: pre-line;"></div>
+  </div>
+
+  <div class="mt-5">
+    <h5>Mensagem para falta de documentos:</h5>
+    <div class="border p-3 bg-white rounded" style="white-space: pre-line;">
+      Adicionar  
+      Certidão de Nascimento ou Casamento;  
+      RG;  
+      CPF;  
+      Título de Eleitor  
+      Certidão de Quitação Eleitoral  
+      Certificado e Histórico Escolar  
+      Nada Consta Biblioteca, Financeiro ,Assistência  
+      Declaração de autenticidade
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <h5>Onde Solicitar Documentos:</h5>
+    <div class="border p-3 bg-white rounded" style="white-space: pre-line;">
+      - Adicionar as declarações de nada consta, que podem ser pedidas nos referidos e-mails:  
+        Assistência estudantil: &lt;<a href="mailto:servicosocial.sousa@ifpb.edu.br">servicosocial.sousa@ifpb.edu.br</a>&gt;  
+        Financeiro: &lt;<a href="mailto:financeiro.ifpb@gmail.com">financeiro.ifpb@gmail.com</a>&gt;  
+        Biblioteca: &lt;<a href="mailto:biblioteca.ss@ifpb.edu.br">biblioteca.ss@ifpb.edu.br</a>&gt;
+
+      - Solicito a inclusão dos nada consta da biblioteca, assistência estudantil e financeiro. Pode ser solicitado via email para:  
+        Assistência: <a href="mailto:servicosocial.sousa@ifpb.edu.br">servicosocial.sousa@ifpb.edu.br</a>  
+        Financeiro: <a href="mailto:financeiro.ifpb@gmail.com">financeiro.ifpb@gmail.com</a>  
+        Biblioteca: <a href="mailto:biblioteca.ss@ifpb.edu.br">biblioteca.ss@ifpb.edu.br</a>
+
+      - Anexar a declaração de autenticidade dos dados:  
+        <a href="https://www.ifpb.edu.br/joaopessoa/institucional/perguntas-frequentes/documentos/declaracao-de-responsabilidade-da-autenticidade-dos-documentos-anexados-ao-processo-de-solicitacao-de-diploma.pdf" target="_blank">
+        https://www.ifpb.edu.br/joaopessoa/institucional/perguntas-frequentes/documentos/declaracao-de-responsabilidade-da-autenticidade-dos-documentos-anexados-ao-processo-de-solicitacao-de-diploma.pdf</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function gerarMensagem() {
+    const nome = document.getElementById("nome").value;
+    const matricula = document.getElementById("matricula").value;
+    const dataInput = document.getElementById("data").value;
+    const trabalho = document.getElementById("trabalho").value;
+    const genero = document.getElementById("genero").value;
+
+    if (!nome || !matricula || !dataInput) {
+      alert("Preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    const [ano, mes, dia] = dataInput.split("-");
+    const dataFormatada = `${dia}/${mes}/${ano}`;
+
+    let generoTexto = genero === "masculino" ? " do" : "da";
+    let trabalhoTexto = trabalho === "TCC"
+      ? "Trabalho de Conclusão de Curso (TCC)"
+      : "Relatório de Estágio";
+
+    const mensagem = `Diante do requerimento de Diplomação ${generoTexto} estuante ${nome}, matrícula de número ${matricula}, havendo cumprido toda a carga horária em componentes curriculares e demais requisitos obrigatórios necessários à conclusão do curso, bem como obtido aprovação no ${trabalhoTexto}, encaminhamos aos autos à CCA para demais procedimentos cabíveis.`;
+
+    document.getElementById("mensagem").innerText = mensagem.trim();
+  }
+
+  function copiarMensagem() {
+    const texto = document.getElementById("mensagem").innerText;
+    navigator.clipboard.writeText(texto)
+      .then(() => alert("Mensagem copiada!"))
+      .catch(() => alert("Erro ao copiar mensagem."));
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Alterar Senha - Integra Maker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-key me-2"></i>Alterar Senha
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="senha_atual" class="form-label">Senha Atual</label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="senha_atual" 
+                                   name="senha_atual" 
+                                   required>
+                            <div class="invalid-feedback">
+                                Por favor, insira sua senha atual.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nova_senha" class="form-label">Nova Senha</label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="nova_senha" 
+                                   name="nova_senha" 
+                                   minlength="6"
+                                   required>
+                            <div class="form-text">
+                                A senha deve ter pelo menos 6 caracteres.
+                            </div>
+                            <div class="invalid-feedback">
+                                Por favor, insira uma nova senha com pelo menos 6 caracteres.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmar_senha" class="form-label">Confirmar Nova Senha</label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="confirmar_senha" 
+                                   name="confirmar_senha" 
+                                   minlength="6"
+                                   required>
+                            <div class="invalid-feedback">
+                                As senhas devem coincidir.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Alterar Senha
+                            </button>
+                            <a href="{{ url_for('admin') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validação de confirmação de senha
+document.getElementById('confirmar_senha').addEventListener('input', function() {
+    const novaSenha = document.getElementById('nova_senha').value;
+    const confirmarSenha = this.value;
+    
+    if (novaSenha !== confirmarSenha) {
+        this.setCustomValidity('As senhas não coincidem.');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+
+// Validação do formulário
+(function() {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+{% endblock %}
+
+

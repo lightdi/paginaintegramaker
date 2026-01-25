@@ -282,6 +282,41 @@ def reenviar_confirmacao():
     
     return redirect(url_for('login'))
 
+@app.route('/alterar-senha', methods=['GET', 'POST'])
+@login_required
+def alterar_senha():
+    """Permite que o usuário troque sua própria senha"""
+    user = Usuario.query.get(session['user_id'])
+    
+    if request.method == 'POST':
+        senha_atual = request.form['senha_atual']
+        nova_senha = request.form['nova_senha']
+        confirmar_senha = request.form['confirmar_senha']
+        
+        # Validar senha atual
+        if not user.check_password(senha_atual):
+            flash('Senha atual incorreta.', 'error')
+            return render_template('alterar_senha.html')
+        
+        # Validar se as novas senhas coincidem
+        if nova_senha != confirmar_senha:
+            flash('As novas senhas não coincidem.', 'error')
+            return render_template('alterar_senha.html')
+        
+        # Validar tamanho mínimo da senha
+        if len(nova_senha) < 6:
+            flash('A nova senha deve ter pelo menos 6 caracteres.', 'error')
+            return render_template('alterar_senha.html')
+        
+        # Atualizar senha
+        user.set_password(nova_senha)
+        db.session.commit()
+        
+        flash('Senha alterada com sucesso!', 'success')
+        return redirect(url_for('admin'))
+    
+    return render_template('alterar_senha.html')
+
 # Rotas principais
 @app.route('/')
 def index():
@@ -453,6 +488,42 @@ def admin_noticia_deletar(id):
     flash('Notícia deletada com sucesso!', 'success')
     return redirect(url_for('admin_noticias'))
 
+@app.route('/admin/usuarios')
+@admin_required
+def admin_usuarios():
+    """Lista todos os usuários do sistema"""
+    usuarios = Usuario.query.order_by(Usuario.data_criacao.desc()).all()
+    return render_template('admin/usuarios.html', usuarios=usuarios)
+
+@app.route('/admin/usuarios/<int:id>/alterar-senha', methods=['GET', 'POST'])
+@admin_required
+def admin_usuario_alterar_senha(id):
+    """Permite que o administrador troque a senha de qualquer usuário"""
+    usuario = Usuario.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        nova_senha = request.form['nova_senha']
+        confirmar_senha = request.form['confirmar_senha']
+        
+        # Validar se as senhas coincidem
+        if nova_senha != confirmar_senha:
+            flash('As senhas não coincidem.', 'error')
+            return render_template('admin/alterar_senha_usuario.html', usuario=usuario)
+        
+        # Validar tamanho mínimo da senha
+        if len(nova_senha) < 6:
+            flash('A senha deve ter pelo menos 6 caracteres.', 'error')
+            return render_template('admin/alterar_senha_usuario.html', usuario=usuario)
+        
+        # Atualizar senha
+        usuario.set_password(nova_senha)
+        db.session.commit()
+        
+        flash(f'Senha do usuário {usuario.username} alterada com sucesso!', 'success')
+        return redirect(url_for('admin_usuarios'))
+    
+    return render_template('admin/alterar_senha_usuario.html', usuario=usuario)
+
 
 def send_message(chat_id: int, text: str):
     url = f"{BASE_URL}/sendMessage"
@@ -484,3 +555,9 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
+
+
+#Página simples de ação
+@app.route('/diploma')
+def noticias():
+    return render_template('diploma.html')
