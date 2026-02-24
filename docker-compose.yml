@@ -6,8 +6,8 @@ services:
     container_name: paginaintegramaker
     environment:
       DB_NAME: integra_db
-      DB_USER: agro_userindustria
-      DB_PASSWORD: "!AgorIndustria"
+      DB_USER: integramaker
+      DB_PASSWORD: "!IntegraMaker2025"
       DB_HOST: postgres
       DB_PORT: "5432"
     volumes:
