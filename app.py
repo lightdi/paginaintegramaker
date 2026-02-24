@@ -7,7 +7,7 @@ import requests
 import re
 from dotenv import load_dotenv
 from models import db, Usuario, Projeto, Noticia
-from rag.rag import query_rag
+#from rag.rag import query_rag
 
 TELEGRAM_TOKEN="8396320863:AAE2gcTlMhb-Xj5WEApaF8SrdBL0ls-_TmY"
 WEBHOOK_URL= "https://fearless-ellsworth-obsessional.ngrok-free.dev/telegram/webhook"
@@ -535,7 +535,7 @@ def send_message(chat_id: int, text: str):
 
 
     
-
+'''
 @app.route('/telegram/webhook', methods=['POST'])
 def telegram_webhook():
     data = request.get_json(force=True)
@@ -552,6 +552,7 @@ def telegram_webhook():
         send_message(chat_id, resposta)
 
     return jsonify({"ok": True})
+'''
 
 if __name__ == '__main__':
     with app.app_context():

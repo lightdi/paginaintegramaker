@@ -1,0 +1,58 @@
+services:
+  paginaintegramaker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paginaintegramaker
+    environment:
+      DB_NAME: integra_db
+      DB_USER: agro_userindustria
+      DB_PASSWORD: "!AgorIndustria"
+      DB_HOST: postgres
+      DB_PORT: "5432"
+    volumes:
+      - ./instance:/app/instance
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    networks:
+      - integramaker_db
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.paginaintegramaker.rule=Host(`integramaker.ifpb.edu.br`)"
+      - "traefik.http.routers.paginaintegramaker.entrypoints=websecure"
+      - "traefik.http.routers.paginaintegramaker.tls=true"
+      - "traefik.http.routers.paginaintegramaker.tls.certresolver=le"
+      - "traefik.http.services.paginaintegramaker.loadbalancer.server.port=5001"
+      - "traefik.docker.network=proxy"
+
+  postgres:
+    image: postgres:16
+    container_name: integramaker_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: integramaker
+      POSTGRES_PASSWORD: "!IntegraMaker2025"
+      POSTGRES_DB: integra_db
+      TZ: America/Fortaleza
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "9001:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U integramaker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - integramaker_db
+
+volumes:
+  postgres_data:
+
+networks:
+  proxy:
+    external: true
+  integramaker_db:
+    driver: bridge

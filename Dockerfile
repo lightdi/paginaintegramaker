@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Expor porta
-EXPOSE 5003
+EXPOSE 5001
 
 # Comando para executar
-CMD ["gunicorn", "--bind", "0.0.0.0:5003", "app:app", "--workers", "3"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "app:app", "--workers", "3"]
