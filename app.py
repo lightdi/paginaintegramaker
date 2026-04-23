@@ -6,6 +6,7 @@ import os
 import requests
 import re
 from dotenv import load_dotenv
+import paho.mqtt.client as mqtt
 from models import db, Usuario, Projeto, Noticia
 #from rag.rag import query_rag
 
@@ -362,6 +363,23 @@ def sobre():
 @app.route('/diploma', methods=['GET'])
 def diploma():
     return render_template('diploma.html')
+
+@app.route('/abiriporta', methods=['GET', 'POST'])
+def abiriporta():
+    if request.method == 'POST':
+        chave = request.form.get('chave', '')
+        if chave != '!IntegraMaker2025':
+            return jsonify({'ok': False, 'msg': 'Chave inválida'}), 401
+        try:
+            client = mqtt.Client()
+            client.username_pw_set('iotsousa', '!IntegraMaker2025')
+            client.connect('200.129.71.149', 1883, 60)
+            client.publish('Sede/Integra/porta', '1')
+            client.disconnect()
+            return jsonify({'ok': True, 'msg': 'Porta aberta'}), 200
+        except Exception as e:
+            return jsonify({'ok': False, 'msg': str(e)}), 500
+    return render_template('abiriporta.html')
 
 # Área administrativa
 @app.route('/admin')
