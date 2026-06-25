@@ -22,8 +22,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.paginaintegramaker.rule=Host(`fearless-ellsworth-obsessional.ngrok-free.dev`)"
       - "traefik.http.routers.paginaintegramaker.entrypoints=websecure"
-      - "traefik.http.routers.paginaintegramaker.tls=true"
-      - "traefik.http.routers.paginaintegramaker.tls.certresolver=le"
+      #- "traefik.http.routers.paginaintegramaker.tls=true"
+      #- "traefik.http.routers.paginaintegramaker.tls.certresolver=le"
       - "traefik.http.services.paginaintegramaker.loadbalancer.server.port=5001"
       - "traefik.docker.network=proxy"
 
